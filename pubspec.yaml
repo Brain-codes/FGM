@@ -37,6 +37,22 @@ flutter_icons:
   macos:
     generate: true
     image_path: images/app-logo.png
+flutter_native_splash:
+  color: '#FFFFFF'
+  color_dark: '#FFFFFF'
+  branding: images/branding.png
+  branding_dark: images/branding.png
+  branding_mode: bottom
+  image: images/app-logo.png
+  image_dark: images/app-logo.png
+  android_12:
+    icon_background_color: '#FFFFFF'
+    icon_background_color_dark: '#FFFFFF'
+    branding: images/branding.png
+    branding_dark: images/branding.png
+    branding_mode: bottom
+    image: images/app-logo.png
+    image_dark: images/app-logo.png
 flutter:
   uses-material-design: true
   assets:
