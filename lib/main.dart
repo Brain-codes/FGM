@@ -1,6 +1,14 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: prefer_const_constructors
 
-void main() {
+import 'package:FGM/onboarding/onboarding_container.dart';
+import 'package:FGM/shared/constants/app_string.dart';
+import 'package:FGM/shared/themes/app_theme.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+void main() async {
+  await Hive.initFlutter();
+  await Hive.openBox("BluKardLocalDatabase");
   runApp(const MyApp());
 }
 
@@ -9,59 +17,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'FGM',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Color.fromARGB(0, 14, 124, 188),
+        systemNavigationBarIconBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.dark,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+    return MaterialApp(
+      title: AppStrings.appName,
+      theme: AppTheme.lightTheme,
+      debugShowCheckedModeBanner: false,
+      home: OnboardingScreen(),
     );
   }
 }
