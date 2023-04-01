@@ -11,7 +11,7 @@ class OutlineButtonWidget extends StatelessWidget {
     required this.buttonTitle,
   });
 
-  final VoidCallback? onTaps;
+  final void Function() onTaps;
   final String buttonTitle;
 
   @override

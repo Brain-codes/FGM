@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields
 
+import 'package:FGM/auth/ui/login_screen.dart';
 import 'package:FGM/onboarding/board_one.dart';
 import 'package:FGM/onboarding/onboard_three.dart';
 import 'package:FGM/onboarding/onboard_two.dart';
@@ -52,7 +53,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               count: 3,
               effect: ExpandingDotsEffect(
                 activeDotColor: AppColors.activeDots,
-                dotColor: AppColors.inActiveDots,
+                dotColor: AppColors.inActive,
                 dotWidth: 5.0,
                 dotHeight: 5.0,
                 spacing: 5.0,
@@ -102,7 +103,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     height: 15,
                   ),
                   OutlineButtonWidget(
-                    onTaps: () {},
+                    onTaps: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginScreen(),
+                        ),
+                      );
+                    },
                     buttonTitle: AppStrings.logIn,
                   ),
                 ],

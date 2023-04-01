@@ -13,7 +13,7 @@ class FilledButton extends StatelessWidget {
     this.icon = '',
   });
 
-  final VoidCallback? onTaps;
+  final void Function() onTaps;
   final String buttonTitle;
   final Color? colors;
   final String? icon;

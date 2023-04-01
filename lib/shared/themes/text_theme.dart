@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TextThemes {
-  TextStyle getTextStyle(
-      {double fontSize = 12,
-      Color color = AppColors.secondaryTextColor,
-      FontWeight fontWeight = FontWeight.w400,
-      TextDecoration? decoration,
-      double? height,
-      double? letterSpacing}) {
+  TextStyle getTextStyle({
+    double fontSize = 12,
+    Color color = AppColors.secondaryTextColor,
+    FontWeight fontWeight = FontWeight.w400,
+    TextDecoration? decoration,
+    double? height,
+    double? letterSpacing,
+  }) {
     return GoogleFonts.outfit(
         fontSize: fontSize,
         color: color,
