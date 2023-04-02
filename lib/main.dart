@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       title: AppStrings.appName,
       theme: AppTheme.lightTheme,
       debugShowCheckedModeBanner: false,
-      home: BaseBottomNavigation(),
+      home: OnboardingScreen(),
     );
   }
 }

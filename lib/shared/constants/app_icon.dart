@@ -18,4 +18,7 @@ mixin AppIcons {
   static const feedback = 'images/feedbac.svg';
   static const chevronRight = 'images/shevron-right.svg';
   static const logout = 'images/logout.svg';
+  static const recordDot = 'images/recordDot.svg';
+  static const headPhones = 'images/headphones.svg';
+  static const monitor = 'images/monitor.svg';
 }

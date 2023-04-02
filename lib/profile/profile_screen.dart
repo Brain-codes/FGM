@@ -37,12 +37,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
+                SizedBox(
+                  height: 20,
+                ),
                 ProfileTiles(
                   buttonValue: 'Feedback',
                   iconValue: AppIcons.feedback,
                   descripionValue: 'We’ll be glad to hear from you',
                 ),
-                 InkWell(
+                InkWell(
                   onTap: () {
                     // _logout();
                   },
