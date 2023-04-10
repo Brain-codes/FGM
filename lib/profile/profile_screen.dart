@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:FGM/auth/ui/login_screen.dart';
 import 'package:FGM/shared/components/tiles/profile_tile.dart';
 import 'package:FGM/shared/constants/app_color.dart';
 import 'package:FGM/shared/constants/app_icon.dart';
 import 'package:FGM/shared/constants/app_string.dart';
+import 'package:FGM/shared/services/local_database_services.dart';
 import 'package:FGM/shared/themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -16,6 +18,16 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  _logout() async {
+    await LocalDatabaseService().clear();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const LoginScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 InkWell(
                   onTap: () {
-                    // _logout();
+                    _logout();
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(

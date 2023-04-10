@@ -8,8 +8,21 @@ mixin AppStrings {
   static const String splashDescription =
       'We are a ministry on a divine mission to transform people from who they are to who God wants them to be through Word, Worship and Prayer';
 
-//END
 
+  //PASSWORD VALIDATION
+  static const passwordAtLeast8Character =
+      'password must be at least 8 character';
+  static const passwordContainANumber = 'password must contain a number';
+  static const passwordContainUppercase = 'password must contain uppercase';
+  static const passwordContainLowercase = 'password must contain lowercase';
+  static const passwordContainSpecialChar =
+      'password must contain a special character';
+  static const passwordContainSpace = 'password must not contain space';
+
+
+
+//END
+  static const enterValidEmail = "Please enter a valid email";
   static const String createAccount = 'Create an account';
   static const String create = 'Create account';
   static const String logIn = 'Log In';

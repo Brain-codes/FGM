@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:FGM/devotional/devotional_details.dart';
+import 'package:FGM/shared/components/loading/devotional_loading.dart';
+import 'package:FGM/shared/components/loading/message_loading.dart';
+import 'package:FGM/shared/components/loading/word_loading.dart';
 import 'package:FGM/shared/components/tiles/devotion_tile.dart';
 import 'package:FGM/shared/constants/app_color.dart';
 import 'package:FGM/shared/constants/app_icon.dart';

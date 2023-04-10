@@ -17,6 +17,13 @@ dependencies:
   flutter_native_splash: ^2.2.18
   hive_flutter: ^1.1.0
   cached_network_image: ^3.2.3
+  audio_video_progress_bar: ^1.0.1
+  just_audio: ^0.9.32
+  just_audio_background: ^0.0.1-beta.9
+  rxdart: ^0.27.7
+  get: ^4.6.5
+  http_interceptor: ^1.0.2
+  shimmer: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -41,20 +48,11 @@ flutter_icons:
 flutter_native_splash:
   color: '#FFFFFF'
   color_dark: '#FFFFFF'
-  branding: images/branding.png
-  branding_dark: images/branding.png
-  branding_mode: bottom
-  image: images/app-logo.png
-  image_dark: images/app-logo.png
   android_12:
     icon_background_color: '#FFFFFF'
     icon_background_color_dark: '#FFFFFF'
-    branding: images/branding.png
-    branding_dark: images/branding.png
-    branding_mode: bottom
-    image: images/app-logo.png
-    image_dark: images/app-logo.png
 flutter:
   uses-material-design: true
   assets:
   - images/
+  - audio/

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:FGM/player/player_screen.dart';
 import 'package:FGM/shared/components/searchbar/base_searchbar.dart';
 import 'package:FGM/shared/components/tiles/messages_tile.dart';
 import 'package:FGM/shared/constants/app_color.dart';
@@ -68,12 +69,18 @@ class _MediaScreenState extends State<MediaScreen> {
                           bottom: 20,
                         ),
                         child: MessagesTile(
-                          image: AppIcons.splashOne,
-                          message: 'Sure Mercies of David',
-                          pastor: 'Pastor Chijioke Okonkwo',
-                          date: 'Jan 1, 2023',
-                          onTaps: () {},
-                        ),
+                            image: AppIcons.splashOne,
+                            message: 'Sure Mercies of David',
+                            pastor: 'Pastor Chijioke Okonkwo',
+                            date: 'Jan 1, 2023',
+                            onTaps: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const AudioScreen(),
+                                ),
+                              );
+                            }),
                       );
                     },
                   ),
