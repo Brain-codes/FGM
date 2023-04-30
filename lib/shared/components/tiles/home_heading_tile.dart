@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:FGM/shared/constants/app_color.dart';
 import 'package:FGM/shared/themes/text_theme.dart';
 import 'package:flutter/material.dart';
@@ -5,12 +7,13 @@ import 'package:flutter/material.dart';
 class HomeHeadingTile extends StatelessWidget {
   String title;
   void Function()? onTap;
+  bool isEmpty;
 
-  HomeHeadingTile({
-    super.key,
-    required this.title,
-    required this.onTap,
-  });
+  HomeHeadingTile(
+      {super.key,
+      required this.title,
+      required this.onTap,
+      required this.isEmpty});
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +28,16 @@ class HomeHeadingTile extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        GestureDetector(
-          onTap: onTap,
-          child: Text(
-            'See all',
-            style: TextThemes(context).getTextStyle(),
-          ),
+        SizedBox(
+          child: isEmpty
+              ? SizedBox()
+              : GestureDetector(
+                  onTap: onTap,
+                  child: Text(
+                    'See all',
+                    style: TextThemes(context).getTextStyle(),
+                  ),
+                ),
         ),
       ],
     );

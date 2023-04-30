@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class UpcomingEventTile extends StatelessWidget {
-  String date;
-  String image;
+  String? date;
+  String? image;
   UpcomingEventTile({
     super.key,
     required this.date,
@@ -19,15 +19,33 @@ class UpcomingEventTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Container(
-          width: double.infinity,
-          height: 132,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage(image),
-            ),
-            borderRadius: BorderRadius.circular(5),
+        // Container(
+        //   width: double.infinity,
+        //   height: 132,
+        //   decoration: BoxDecoration(
+        //     image: DecorationImage(
+        //       fit: BoxFit.cover,
+        //       image: NetworkImage('$image'),
+        //     ),
+        //     borderRadius: BorderRadius.circular(5),
+        //   ),
+        // ),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(5),
+          child: Image.network(
+            '$image',
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: 132,
+            errorBuilder: (BuildContext context, Object exception,
+                StackTrace? stackTrace) {
+              return Image.asset(
+                AppIcons.errorImg,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 132,
+              );
+            },
           ),
         ),
         Positioned(
@@ -45,7 +63,7 @@ class UpcomingEventTile extends StatelessWidget {
               ),
             ),
             child: Text(
-              date,
+              '$date',
               style: TextThemes(context).getTextStyle(
                 color: AppColors.primaryTextColor,
                 fontSize: 10,

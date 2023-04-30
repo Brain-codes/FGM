@@ -1,6 +1,8 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_init_to_null
 
-import 'package:FGM/devotional/devotional_details.dart';
+import 'package:FGM/devotional/controller/devotional_controller.dart';
+import 'package:FGM/devotional/model/all_devotional_model.dart';
+import 'package:FGM/devotional/ui/devotional_details.dart';
 import 'package:FGM/shared/components/loading/devotional_loading.dart';
 import 'package:FGM/shared/components/loading/message_loading.dart';
 import 'package:FGM/shared/components/loading/word_loading.dart';
@@ -11,17 +13,45 @@ import 'package:FGM/shared/themes/text_theme.dart';
 import 'package:FGM/shared/ui/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/instance_manager.dart';
 
 class DevotionalScreen extends StatefulWidget {
-  const DevotionalScreen({super.key});
+  List<AllDevotionalModel>? devotionaItem;
+
+  DevotionalScreen({super.key, this.devotionaItem = null});
 
   @override
   State<DevotionalScreen> createState() => _DevotionalScreenState();
 }
 
 class _DevotionalScreenState extends State<DevotionalScreen> {
+  final DevotionalController _DevotionalController =
+      Get.put(DevotionalController());
+  List<AllDevotionalModel>? _devotionaItem;
+
   bool _isDropdownOpen = false;
   String _selectedOption = 'January';
+
+  getAllDevotion() async {
+    if (widget.devotionaItem == null) {
+      await _DevotionalController.getAllDevotional(context);
+      setState(() {
+        _devotionaItem = _DevotionalController.devotionaItem;
+      });
+    } else {
+      setState(() {
+        widget.devotionaItem = _devotionaItem;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    print(widget.devotionaItem?[0].content);
+    getAllDevotion();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,38 +169,64 @@ class _DevotionalScreenState extends State<DevotionalScreen> {
               SizedBox(
                 height: 30,
               ),
-              SizedBox(
-                child: ListView.builder(
-                  itemCount: 10,
-                  padding: EdgeInsets.only(
-                    bottom: 20,
-                  ),
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: 20,
+              Obx(
+                () => _DevotionalController.isLoading.value
+                    ? SizedBox(
+                        child: ListView.builder(
+                          itemCount: 4,
+                          padding: EdgeInsets.only(
+                            bottom: 20,
+                          ),
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: 20,
+                              ),
+                              child: DevotionalLoader(),
+                            );
+                          },
+                        ),
+                      )
+                    : SizedBox(
+                        child: ListView.builder(
+                          itemCount: _devotionaItem?.length,
+                          padding: EdgeInsets.only(bottom: 20),
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) {
+                            final reversedIndex = _devotionaItem?.length != null
+                                ? _devotionaItem!.length - 1 - index
+                                : 0;
+
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 20),
+                              child: DevotionTile(
+                                image: _devotionaItem?[reversedIndex].image?.secureUrl,
+                                title:
+                                    '${_devotionaItem?[reversedIndex].title}',
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          DevotionalDetails(
+                                            devotionalDetails: _devotionaItem![reversedIndex],
+                                          ),
+                                    ),
+                                  );
+                                },
+                                description:
+                                    _devotionaItem?[reversedIndex].content,
+                                date: _devotionaItem?[reversedIndex].date,
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                      child: DevotionTile(
-                        image: AppIcons.dummyImage,
-                        title: 'Finding God’s joy in your life',
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const DevotionalDetails(),
-                            ),
-                          );
-                        },
-                        description:
-                            'Lorem ipsum dolor sit amet consectetur. Lectus imperdiet a gravida turpis proin. turpis proin....',
-                        date: 'Jan 1, 2023',
-                      ),
-                    );
-                  },
-                ),
               ),
             ],
           ),

@@ -1,14 +1,15 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:FGM/shared/constants/app_color.dart';
+import 'package:FGM/shared/constants/app_icon.dart';
 import 'package:FGM/shared/themes/text_theme.dart';
 import 'package:flutter/material.dart';
 
 class DevotionTile extends StatelessWidget {
-  String image;
+  String? image;
   String title;
-  String description;
-  String date;
+  String? description;
+  String? date;
   void Function()? onTap;
   DevotionTile({
     super.key,
@@ -35,18 +36,25 @@ class DevotionTile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: double.infinity,
-              height: 72,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage(image),
-                ),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(5),
-                  topRight: Radius.circular(5),
-                ),
+            ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(5),
+                topRight: Radius.circular(5),
+              ),
+              child: Image.network(
+                '$image',
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 72,
+                errorBuilder: (BuildContext context, Object exception,
+                    StackTrace? stackTrace) {
+                  return Image.asset(
+                    AppIcons.errorImg,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: 72,
+                  );
+                },
               ),
             ),
             Padding(
@@ -55,7 +63,7 @@ class DevotionTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    date,
+                    date ?? '',
                     style: TextThemes(context).getTextStyle(
                       color: AppColors.placeHolderTextColor,
                     ),
@@ -76,7 +84,7 @@ class DevotionTile extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    description,
+                    description ?? '',
                     textAlign: TextAlign.left,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,

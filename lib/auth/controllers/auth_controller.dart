@@ -35,11 +35,13 @@ class AuthController extends GetxController {
 
   Future<void> login(BuildContext context) async {
     isLoading.value = true;
-    final response =
-        await _authService.login(email.value.toLowerCase(), password.value);
+    final response = await _authService.login(
+        email.value.toLowerCase().trim(), password.value.trim());
     if (response.success == true) {
       var result = LoginModel.fromJson(response.data);
       LocalDatabaseService().add(DbKeyStrings.loginToken, result.token);
+      LocalDatabaseService()
+          .add(DbKeyStrings.userDetailsKey, response.data['user']);
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -47,7 +49,6 @@ class AuthController extends GetxController {
         ),
         (Route<dynamic> route) => false,
       );
-
       successSnackBar('Login Successful', response.message);
     } else {
       errorSnackBar('Login Failed', response.message);
@@ -60,10 +61,10 @@ class AuthController extends GetxController {
   Future<void> register(BuildContext context) async {
     isLoading.value = true;
     final response = await _authService.register(
-      name.value,
-      signupEmail.value.toLowerCase(),
-      phone.value,
-      signupPassword.value,
+      name.value.trim(),
+      signupEmail.value.toLowerCase().trim(),
+      phone.value.trim(),
+      signupPassword.value.trim(),
     );
     if (response.code! >= 200 && response.code! < 300) {
       var result = SignupModel.fromJson(response.data);

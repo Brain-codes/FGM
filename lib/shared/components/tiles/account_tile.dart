@@ -1,13 +1,23 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:FGM/shared/components/snackbar/snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../constants/app_color.dart';
 import '../../themes/text_theme.dart';
 import '../buttons/small_outlined_circular_button.dart';
 
 class AccountTile extends StatelessWidget {
-  const AccountTile({super.key});
+  String? accountNumber;
+  String? bankName;
+  String? accountName;
+  AccountTile({
+    super.key,
+    required this.accountName,
+    required this.bankName,
+    required this.accountNumber,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +63,7 @@ class AccountTile extends StatelessWidget {
               children: [
                 Flexible(
                   child: Text(
-                    '0424983913',
+                    '$accountNumber',
                     style: TextThemes(context).getTextStyle(
                       color: AppColors.primaryColor,
                       fontSize: 14,
@@ -63,7 +73,20 @@ class AccountTile extends StatelessWidget {
                 Flexible(
                   child: SmallOutlinedCircularButton(
                     title: 'Copy',
-                    onTaps: () {},
+                    onTaps: () {
+                      Clipboard.setData(ClipboardData(text: '$accountNumber'));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                          'Copied Successfully',
+                          style: TextThemes(context).getTextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        backgroundColor: AppColors.faintPrimaryColor,
+                      ));
+                    },
                   ),
                 ),
               ],
@@ -73,7 +96,7 @@ class AccountTile extends StatelessWidget {
             height: 12,
           ),
           Text(
-            'The Force of Grace Ministry',
+            '$accountName',
             style: TextThemes(context).getTextStyle(
               fontSize: 14,
             ),
@@ -82,7 +105,7 @@ class AccountTile extends StatelessWidget {
             height: 4,
           ),
           Text(
-            'Zenith Bank',
+            '$bankName',
             style: TextThemes(context).getTextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w500,

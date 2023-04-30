@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class LiveEventTile extends StatelessWidget {
-  String image;
+  String? image;
   void Function() onTaps;
 
   LiveEventTile({super.key, required this.image, required this.onTaps});
@@ -32,15 +32,34 @@ class LiveEventTile extends StatelessWidget {
         children: [
           Stack(
             children: <Widget>[
-              Container(
-                width: double.infinity,
-                height: 104,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage(image),
-                  ),
-                  borderRadius: BorderRadius.circular(5),
+              // Container(
+              //   width: double.infinity,
+              //   height: 104,
+              //   decoration: BoxDecoration(
+              //     image: DecorationImage(
+              //       fit: BoxFit.cover,
+              //       image: AssetImage(image),
+              //     ),
+              //     borderRadius: BorderRadius.circular(5),
+              //   ),
+              // ),
+
+              ClipRRect(
+                borderRadius: BorderRadius.circular(5),
+                child: Image.network(
+                  '$image',
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: 104,
+                  errorBuilder: (BuildContext context, Object exception,
+                      StackTrace? stackTrace) {
+                    return Image.asset(
+                      AppIcons.errorImg,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: 104,
+                    );
+                  },
                 ),
               ),
               Positioned(

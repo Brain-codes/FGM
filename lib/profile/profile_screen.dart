@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
 import 'package:FGM/auth/ui/login_screen.dart';
+import 'package:FGM/feedback/feedback_screen.dart';
 import 'package:FGM/shared/components/tiles/profile_tile.dart';
 import 'package:FGM/shared/constants/app_color.dart';
 import 'package:FGM/shared/constants/app_icon.dart';
@@ -52,10 +53,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(
                   height: 20,
                 ),
-                ProfileTiles(
-                  buttonValue: 'Feedback',
-                  iconValue: AppIcons.feedback,
-                  descripionValue: 'We’ll be glad to hear from you',
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const FeedBackScreen(),
+                      ),
+                    );
+                  },
+                  child: ProfileTiles(
+                    buttonValue: 'Feedback',
+                    iconValue: AppIcons.feedback,
+                    descripionValue: 'We’ll be glad to hear from you',
+                  ),
                 ),
                 InkWell(
                   onTap: () {

@@ -63,7 +63,11 @@ class _GiveScreenState extends State<GiveScreen> {
                       padding: const EdgeInsets.only(
                         bottom: 20,
                       ),
-                      child: AccountTile(),
+                      child: AccountTile(
+                        accountNumber: '0424983913',
+                        accountName: 'The Force of Grace Ministry',
+                        bankName: 'Zenith Bank',
+                      ),
                     );
                   },
                 ),

@@ -8,7 +8,17 @@ import 'package:flutter_svg/svg.dart';
 
 class BaseSearchField extends StatefulWidget {
   final String? hintText;
-  const BaseSearchField({super.key, this.hintText});
+  final TextEditingController? controller;
+  final bool enabled;
+  final Function(String? value)? onTyping;
+
+  const BaseSearchField({
+    super.key,
+    this.hintText,
+    this.onTyping,
+    this.controller,
+    this.enabled = true,
+  });
 
   @override
   State<BaseSearchField> createState() => _BaseSearchFieldState();
@@ -22,6 +32,9 @@ class _BaseSearchFieldState extends State<BaseSearchField> {
         fontSize: 13,
         fontWeight: FontWeight.w400,
       ),
+      onChanged: (val) => widget.onTyping!(val),
+      controller: widget.controller,
+      enabled: widget.enabled,
       decoration: InputDecoration(
         contentPadding:
             const EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
@@ -30,6 +43,13 @@ class _BaseSearchFieldState extends State<BaseSearchField> {
           color: AppColors.placeHolderTextColor,
           fontSize: 13,
           fontWeight: FontWeight.w400,
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Color(0xffE0E0E0),
+          ),
+          gapPadding: 2,
+          borderRadius: BorderRadius.circular(5),
         ),
         alignLabelWithHint: true,
         prefixIcon: Padding(
@@ -52,7 +72,7 @@ class _BaseSearchFieldState extends State<BaseSearchField> {
           ),
           borderRadius: BorderRadius.circular(5),
         ),
-        border: InputBorder.none,
+        // border: InputBorder.none,
       ),
     );
   }

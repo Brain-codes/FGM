@@ -9,18 +9,22 @@ import 'package:flutter/material.dart';
 
 class MessagesTile extends StatelessWidget {
   void Function() onTaps;
-  String image;
-  String pastor;
-  String message;
-  String date;
+  void Function() onTapsDownload;
+  String? image;
+  String? pastor;
+  String? message;
+  String? date;
+  double? progress;
 
   MessagesTile({
     super.key,
     required this.onTaps,
+    required this.onTapsDownload,
     required this.image,
     required this.pastor,
     required this.message,
     required this.date,
+    required this.progress,
   });
 
   @override
@@ -47,11 +51,20 @@ class MessagesTile extends StatelessWidget {
               direction: Axis.horizontal,
               children: [
                 Flexible(
-                  child: Image.asset(
-                    AppIcons.splashOne,
+                  child: Image.network(
+                    '$image',
                     fit: BoxFit.cover,
                     width: 56,
                     height: 56,
+                    errorBuilder: (BuildContext context, Object exception,
+                        StackTrace? stackTrace) {
+                      return Image.asset(
+                        AppIcons.appLogo,
+                        fit: BoxFit.cover,
+                        width: 56,
+                        height: 56,
+                      );
+                    },
                   ),
                 ),
                 Flexible(
@@ -65,7 +78,7 @@ class MessagesTile extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          message,
+                          '$message',
                           overflow: TextOverflow.ellipsis,
                           style: TextThemes(context).getTextStyle(
                             color: AppColors.primaryTextColor,
@@ -77,7 +90,7 @@ class MessagesTile extends StatelessWidget {
                           height: 4,
                         ),
                         Text(
-                          pastor,
+                          '$pastor',
                           overflow: TextOverflow.ellipsis,
                           style: TextThemes(context).getTextStyle(
                             fontSize: 10,
@@ -87,7 +100,7 @@ class MessagesTile extends StatelessWidget {
                           height: 6,
                         ),
                         Text(
-                          date,
+                          '$date',
                           overflow: TextOverflow.ellipsis,
                           style: TextThemes(context).getTextStyle(
                             fontSize: 10,
@@ -102,22 +115,48 @@ class MessagesTile extends StatelessWidget {
             ),
           ),
           Flexible(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                SmallFilledCircularButton(
-                  title: 'Play',
-                  onTaps: onTaps,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                SmallOutlinedCircularButton(
-                  title: 'Download',
-                  onTaps: onTaps,
-                )
-              ],
-            ),
+            child: progress != null
+                ? ClipRRect(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(200),
+                    ),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 0, 147, 76),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(300),
+                        ),
+                      ),
+                      child: Text(
+                        '${progress?.round()}%',
+                        style: TextThemes(context).getTextStyle(
+                          fontSize: 8,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SmallFilledCircularButton(
+                        title: 'Play',
+                        onTaps: onTaps,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      SmallOutlinedCircularButton(
+                        title: 'Download',
+                        onTaps: onTapsDownload,
+                      )
+                    ],
+                  ),
           ),
         ],
       ),

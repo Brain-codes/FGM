@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:FGM/auth/adapters/user_adapter.dart';
 import 'package:FGM/navigation/base_bottom_navigation.dart';
 import 'package:FGM/onboarding/onboarding_container.dart';
 import 'package:FGM/player/player_screen.dart';
@@ -15,6 +16,10 @@ import 'package:hive_flutter/hive_flutter.dart';
 void main() async {
   await Hive.initFlutter();
   await Hive.openBox(DbKeyStrings.dbName);
+
+  //TODO: REMOVE DEBUG : TRUE WHEN BUILDING
+  // Register the UserAdapter
+  // Hive.registerAdapter(UserAdapter());
   runApp(const MyApp());
 }
 

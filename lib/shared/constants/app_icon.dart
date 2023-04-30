@@ -1,5 +1,6 @@
 mixin AppIcons {
   static const appLogo = 'images/app-logo.png';
+  static const errorImg = 'images/errorImg.png';
   static const splashOne = 'images/splash-one.png';
   static const splashTwo = 'images/splash-two.png';
   static const splashThree = 'images/splash-three.png';
@@ -8,6 +9,7 @@ mixin AppIcons {
   static const backArrow = 'images/arrow-left.svg';
   static const navHome = 'images/home.svg';
   static const navEvent = 'images/event.svg';
+  static const emptyEvent = 'images/emptyEvent.svg';
   static const navGive = 'images/give.svg';
   static const navMedia = 'images/media.svg';
   static const navProfile = 'images/profile.svg';
@@ -21,4 +23,6 @@ mixin AppIcons {
   static const recordDot = 'images/recordDot.svg';
   static const headPhones = 'images/headphones.svg';
   static const monitor = 'images/monitor.svg';
+  static const topDash = 'images/top_dash.svg';
+
 }
