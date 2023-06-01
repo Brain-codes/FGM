@@ -18,6 +18,7 @@ class AllMediaModel {
     this.id,
     this.date,
     this.progress,
+    this.isPlaying,
   });
 
   String? title;
@@ -27,6 +28,7 @@ class AllMediaModel {
   String? id;
   String? date;
   double? progress;
+  bool? isPlaying;
 
   factory AllMediaModel.fromJson(Map<String, dynamic> json) => AllMediaModel(
         title: json["title"],

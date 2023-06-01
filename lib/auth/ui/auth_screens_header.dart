@@ -8,10 +8,12 @@ import 'package:flutter/material.dart';
 class AuthScreensHeader extends StatelessWidget {
   String heading;
   String description;
+  bool showLogo;
   AuthScreensHeader({
     super.key,
     required this.heading,
     required this.description,
+    this.showLogo = true,
   });
 
   @override
@@ -19,13 +21,21 @@ class AuthScreensHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Image.asset(
-          AppIcons.appLogo,
-          fit: BoxFit.cover,
-          width: 71,
-        ),
         SizedBox(
-          height: 10,
+          child: showLogo
+              ? Column(
+                  children: [
+                    Image.asset(
+                      AppIcons.appLogo,
+                      fit: BoxFit.cover,
+                      width: 71,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    )
+                  ],
+                )
+              : SizedBox(),
         ),
         Text(
           heading,

@@ -1,9 +1,11 @@
-// ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks, avoid_print
+// ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks, avoid_print, prefer_const_constructors
 
 import 'package:FGM/auth/model/login_model.dart';
 import 'package:FGM/auth/model/signup_model.dart';
 import 'package:FGM/auth/services/auth_service.dart';
 import 'package:FGM/auth/ui/login_screen.dart';
+import 'package:FGM/auth/ui/otp_screen.dart';
+import 'package:FGM/auth/ui/reset_password_screen.dart';
 import 'package:FGM/navigation/base_bottom_navigation.dart';
 import 'package:FGM/shared/components/snackbar/snack_bar.dart';
 import 'package:FGM/shared/services/api_service.dart';
@@ -11,6 +13,8 @@ import 'package:FGM/shared/services/local_database_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:otp_text_field/otp_text_field.dart';
+import 'package:page_transition/page_transition.dart';
 
 class AuthController extends GetxController {
   final AuthService _authService = AuthService(ApiService());
@@ -21,6 +25,18 @@ class AuthController extends GetxController {
   TextEditingController loginPasswordController = TextEditingController();
   final email = ''.obs;
   final password = ''.obs;
+  //END
+
+  //RESET CREDENTIALS
+  TextEditingController resetEmailController = TextEditingController();
+  TextEditingController newPasswordController = TextEditingController();
+  TextEditingController newPasswordConfirmController = TextEditingController();
+  OtpFieldController otpFieldController = OtpFieldController();
+  final resetEmail = ''.obs;
+  final resetOTP = ''.obs;
+  final newPasswordText = ''.obs;
+  final newPasswordConfirmText = ''.obs;
+
   //END
 
   //SIGNUP CREDENTIALS
@@ -52,6 +68,93 @@ class AuthController extends GetxController {
       successSnackBar('Login Successful', response.message);
     } else {
       errorSnackBar('Login Failed', response.message);
+      isLoading.value = false;
+      print(isLoading.value);
+    }
+    isLoading.value = false;
+  }
+
+  Future<void> resetPassword(BuildContext context) async {
+    isLoading.value = true;
+    final response = await _authService.resetPassword(
+      resetEmail.value.toLowerCase().trim(),
+    );
+    if (response.success == true) {
+      isLoading.value = false;
+      LocalDatabaseService().add(DbKeyStrings.emailKey, resetEmail.value);
+      Navigator.push(
+        context,
+        PageTransition(
+          type: PageTransitionType.rightToLeftWithFade,
+          child: OTPScreen(),
+        ),
+      );
+      successSnackBar('OTP Sent', response.message);
+    } else {
+      errorSnackBar('Oops!', response.message);
+      isLoading.value = false;
+      print(isLoading.value);
+    }
+    isLoading.value = false;
+  }
+
+  Future<void> verifyOTP(BuildContext context) async {
+    isLoading.value = true;
+    final response = await _authService.verifyOTP(
+      LocalDatabaseService().getData(DbKeyStrings.emailKey),
+      resetOTP.value.trim(),
+    );
+    if (response.success == true) {
+      Navigator.push(
+        context,
+        PageTransition(
+          type: PageTransitionType.rightToLeftWithFade,
+          child: ResetPasswordScreen(),
+        ),
+      );
+      successSnackBar('OTP Verified', response.message);
+    } else {
+      errorSnackBar('OTP Verification Failed', response.message);
+      isLoading.value = false;
+      print(isLoading.value);
+    }
+    isLoading.value = false;
+  }
+
+  Future<void> newPassword(BuildContext context) async {
+    isLoading.value = true;
+    final response = await _authService.newPassword(
+      LocalDatabaseService().getData(DbKeyStrings.emailKey),
+      newPasswordText.value.trim(),
+      resetOTP.value.trim(),
+    );
+    if (response.success == true) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(1.0, 0.0),
+              end: Offset.zero,
+            ).animate(CurvedAnimation(
+              parent: ModalRoute.of(context)!.animation!,
+              curve: Curves.fastOutSlowIn,
+            )),
+            child: LoginScreen(),
+          ),
+        ),
+        (Route<dynamic> route) => false,
+      );
+      // Navigator.push(
+      //   context,
+      //   PageTransition(
+      //     type: PageTransitionType.rightToLeftWithFade,
+      //     child: OTPScreen(),
+      //   ),
+      // );
+      successSnackBar('OTP Verified', response.message);
+    } else {
+      errorSnackBar('OTP Verification Failed', response.message);
       isLoading.value = false;
       print(isLoading.value);
     }

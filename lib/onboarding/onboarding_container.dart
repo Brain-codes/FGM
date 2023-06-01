@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields
 
 import 'package:FGM/auth/ui/login_screen.dart';
+import 'package:FGM/auth/ui/signup_screen.dart';
 import 'package:FGM/onboarding/board_one.dart';
 import 'package:FGM/onboarding/onboard_three.dart';
 import 'package:FGM/onboarding/onboard_two.dart';
@@ -96,7 +97,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     height: 40,
                   ),
                   FilledButton(
-                    onTaps: () {},
+                    onTaps: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SignupScreen(),
+                        ),
+                      );
+                    },
                     buttonTitle: AppStrings.createAccount,
                   ),
                   SizedBox(

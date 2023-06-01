@@ -3,6 +3,7 @@
 import 'package:FGM/auth/controllers/auth_controller.dart';
 import 'package:FGM/auth/ui/auth_footer.dart';
 import 'package:FGM/auth/ui/auth_screens_header.dart';
+import 'package:FGM/auth/ui/forgot_password_screen.dart';
 import 'package:FGM/auth/ui/signup_screen.dart';
 import 'package:FGM/navigation/base_bottom_navigation.dart';
 import 'package:FGM/shared/components/buttons/filled_button.dart';
@@ -17,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:FGM/shared/extensions/form_validator.dart';
+import 'package:page_transition/page_transition.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -47,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
         false) {
       setState(() {
         _passwordHasError = true;
-        _errorMessage = 'Enter Valid Email eg Sample@1234';
+        _errorMessage = 'Enter Valid Password eg Sample@1234';
       });
       return;
     }
@@ -133,12 +135,24 @@ class _LoginScreenState extends State<LoginScreen> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(
-                              AppStrings.forgotPass,
-                              style: TextThemes(context).getTextStyle(
-                                color: AppColors.primaryColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  PageTransition(
+                                    type:
+                                        PageTransitionType.rightToLeftWithFade,
+                                    child: ForgotPasswordScreen(),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                AppStrings.forgotPass,
+                                style: TextThemes(context).getTextStyle(
+                                  color: AppColors.primaryColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                             ),
                           ],
@@ -156,30 +170,30 @@ class _LoginScreenState extends State<LoginScreen> {
                                   buttonTitle: AppStrings.logIn,
                                 ),
                         ),
+                        // SizedBox(
+                        //   height: 15,
+                        // ),
+                        // Obx(
+                        //   () => _authController.isLoading.value
+                        //       ? OutlineButtonWidget(
+                        //           onTaps: () {},
+                        //           buttonTitle: AppStrings.continueWithAcc,
+                        //         )
+                        //       : OutlineButtonWidget(
+                        //           onTaps: () {
+                        //             Navigator.push(
+                        //               context,
+                        //               MaterialPageRoute(
+                        //                 builder: (context) =>
+                        //                     const BaseBottomNavigation(),
+                        //               ),
+                        //             );
+                        //           },
+                        //           buttonTitle: AppStrings.continueWithAcc,
+                        //         ),
+                        // ),
                         SizedBox(
-                          height: 15,
-                        ),
-                        Obx(
-                          () => _authController.isLoading.value
-                              ? OutlineButtonWidget(
-                                  onTaps: () {},
-                                  buttonTitle: AppStrings.continueWithAcc,
-                                )
-                              : OutlineButtonWidget(
-                                  onTaps: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const BaseBottomNavigation(),
-                                      ),
-                                    );
-                                  },
-                                  buttonTitle: AppStrings.continueWithAcc,
-                                ),
-                        ),
-                        SizedBox(
-                          height: 70,
+                          height: 120,
                         ),
                       ],
                     ),

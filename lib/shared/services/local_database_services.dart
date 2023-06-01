@@ -35,6 +35,7 @@ mixin DbKeyStrings {
   static const tokenExpiration = 'TOKEN_EXPIRATION';
   static const refreshToken = 'REFRESH_TOKEN';
   static const loginToken = 'TOKEN';
+  static const emailKey = 'EMAIL';
   static const onBoardedKey = 'TOKEN';
   static const businessCreateID = 'BUSINESSESID';
   static const dbName = 'FGMLocalDB';

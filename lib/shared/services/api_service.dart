@@ -71,7 +71,6 @@ class ApiService {
       url += '?' + Uri(queryParameters: queryParams).query;
     }
     print(url);
-    print(jsonEncode(body));
     if (body != null) {
       String jsonBody = jsonEncode(body);
       final response = await client
@@ -144,6 +143,7 @@ class ApiService {
       }
     } on TimeoutException {
       errorSnackBar('Error', 'time out ');
+      print('EFE TIMEOUT');
       return BaseApiResponse(
         code: response.statusCode,
         success: false,

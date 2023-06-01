@@ -12,8 +12,42 @@ class AuthService {
     return _apiService.post('${AppConfig.fgmApiBaseUrl}auth/login', body: body);
   }
 
+  Future<BaseApiResponse> resetPassword(
+    String email,
+  ) async {
+    final body = {
+      'email': email,
+    };
+    return _apiService.post('${AppConfig.fgmApiBaseUrl}auth/sendmail',
+        body: body);
+  }
 
-    Future<BaseApiResponse> register(
+  Future<BaseApiResponse> verifyOTP(
+    String email,
+    String otp,
+  ) async {
+    final body = {
+      'email': email,
+      'otp': otp,
+    };
+    return _apiService.post('${AppConfig.fgmApiBaseUrl}auth/verify',
+        body: body);
+  }
+
+  Future<BaseApiResponse> newPassword(
+    String email,
+    String newPassword,
+    String otp,
+  ) async {
+    final body = {
+      'email': email,
+      "newPassword": newPassword,
+      "otp" : otp
+    };
+    return _apiService.post('${AppConfig.fgmApiBaseUrl}auth/reset', body: body);
+  }
+
+  Future<BaseApiResponse> register(
     String name,
     String email,
     String phone,
@@ -28,8 +62,6 @@ class AuthService {
     return _apiService.post('${AppConfig.fgmApiBaseUrl}auth/register',
         body: body);
   }
-
-
 
   Future<BaseApiResponse> refreshToken(
       String token, String refreshToken) async {

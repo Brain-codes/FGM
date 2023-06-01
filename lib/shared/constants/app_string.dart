@@ -8,7 +8,6 @@ mixin AppStrings {
   static const String splashDescription =
       'We are a ministry on a divine mission to transform people from who they are to who God wants them to be through Word, Worship and Prayer';
 
-
   //PASSWORD VALIDATION
   static const passwordAtLeast8Character =
       'password must be at least 8 character';
@@ -19,21 +18,33 @@ mixin AppStrings {
       'password must contain a special character';
   static const passwordContainSpace = 'password must not contain space';
 
-
-
 //END
   static const enterValidEmail = "Please enter a valid email";
   static const String createAccount = 'Create an account';
   static const String create = 'Create account';
   static const String logIn = 'Log In';
+  static const String verify = 'Verify';
+
+  static const String ammount = 'Ammount';
   static const String welcome = 'Welcome back';
+  static const String otpV = 'OTP Verification';
+  static const String changePassword = 'Change Password';
+  static const String changePasswordDesc =
+      'Input your new strong password to continue';
+  static const String otpDesc = 'Check your email to verify your O.T.P ';
   static const String enter =
       'Enter your credentials to gain access to your account';
   static const String email = 'Email Address';
   static const String password = 'Password';
+  static const String newPassword = 'New Password';
+  static const String confirmPassword = 'Confirm Password';
   static const String forgotPass = 'Forgot Password?';
+  static const String forgotPassDesc =
+      'Enter your registered email below to receive password reset instruction.';
   static const String continueWithAcc = 'Continue without account';
+  static const String reset = 'Reset';
   static const String dontHave = 'Don’t have an account?';
+  static const String back = 'Go Back';
   static const String alreadyHave = 'Have have an account?';
   static const String signUp = 'Sign up';
   static const String name = 'Name';

@@ -15,6 +15,7 @@ class MessagesTile extends StatelessWidget {
   String? message;
   String? date;
   double? progress;
+  bool? isPlaying;
 
   MessagesTile({
     super.key,
@@ -25,6 +26,7 @@ class MessagesTile extends StatelessWidget {
     required this.message,
     required this.date,
     required this.progress,
+    required this.isPlaying,
   });
 
   @override
@@ -144,9 +146,37 @@ class MessagesTile extends StatelessWidget {
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      SmallFilledCircularButton(
-                        title: 'Play',
-                        onTaps: onTaps,
+                      SizedBox(
+                        child: isPlaying == true
+                            ? Padding(
+                                padding: const EdgeInsets.only(
+                                  right: 10,
+                                ),
+                                child: Container(
+                                  width: 13,
+                                  height: 13,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primaryColor,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                    border: Border.all(
+                                      color: AppColors.primaryColor,
+                                      width: 1,
+                                      strokeAlign: StrokeAlign.inside,
+                                    ),
+                                  ),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: AppColors.faintPrimaryColor
+                                        .withOpacity(0.3),
+                                  ),
+                                ),
+                              )
+                            : SmallFilledCircularButton(
+                                title: 'Play',
+                                onTaps: onTaps,
+                              ),
                       ),
                       SizedBox(
                         width: 10,

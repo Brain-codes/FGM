@@ -5,6 +5,7 @@ import 'package:FGM/devotional/model/all_devotional_model.dart';
 import 'package:FGM/devotional/ui/devotional_screen.dart';
 import 'package:FGM/home/controller/home_controller.dart';
 import 'package:FGM/home/model/all_wotw_model.dart';
+import 'package:FGM/media/audio_bottom_player.dart';
 import 'package:FGM/media/controller/media_controller.dart';
 import 'package:FGM/media/media_screen.dart';
 import 'package:FGM/media/model/all_media_model.dart';
@@ -44,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String name = '';
   List<AllMediaModel>? _mediaItem;
   List<AllWotwModel>? _wotwItem;
+  bool _hasPreviousSnackbar = false;
 
   getAllDevotion() async {
     await _HomeController.getAllDevotional(context);
@@ -239,7 +241,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => MediaScreen(),
+                        builder: (context) => MediaScreen(
+                          source: 'home',
+                        ),
                       ),
                     );
                   },
@@ -287,67 +291,125 @@ class _HomeScreenState extends State<HomeScreen> {
                                 physics: NeverScrollableScrollPhysics(),
                                 scrollDirection: Axis.vertical,
                                 itemBuilder: (context, index) {
-                                  final reversedIndex =
-                                      _mediaItem!.length - 1 - index;
                                   return Padding(
                                     padding: const EdgeInsets.only(
                                       bottom: 20,
                                     ),
                                     child: MessagesTile(
-                                      image: _mediaItem?[reversedIndex]
-                                          .image
-                                          ?.secureUrl,
-                                      message: _mediaItem?[reversedIndex].title,
-                                      pastor: _mediaItem?[reversedIndex].name,
-                                      date: _mediaItem?[reversedIndex].date,
-                                      progress:
-                                          _mediaItem?[reversedIndex].progress,
+                                      image:
+                                          _mediaItem?[index].image?.secureUrl,
+                                      message: _mediaItem?[index].title,
+                                      pastor: _mediaItem?[index].name,
+                                      date: _mediaItem?[index].date,
+                                      progress: _mediaItem?[index].progress,
+                                      isPlaying: _mediaItem?[index].isPlaying,
                                       onTapsDownload: () {
-                                        final url = _mediaItem![reversedIndex]
-                                            .audio
-                                            ?.secureUrl;
+                                        final url =
+                                            _mediaItem![index].audio?.secureUrl;
                                         final filename =
-                                            '${_mediaItem![reversedIndex].title} by ${_mediaItem![reversedIndex].name}';
-                                        _downloadFile('$url', filename,
-                                            reversedIndex); // pass the index of the media item
+                                            '${_mediaItem![index].title} by ${_mediaItem![index].name}';
+                                        _downloadFile(
+                                          '$url',
+                                          filename,
+                                          index,
+                                        ); // pass the index of the media item
                                       },
                                       onTaps: () {
+                                        setState(() {
+                                          for (int i = 0;
+                                              i < _mediaItem!.length;
+                                              i++) {
+                                            if (i != index &&
+                                                _mediaItem![i].isPlaying ==
+                                                    true) {
+                                              setState(() {
+                                                _mediaItem![i].isPlaying =
+                                                    false;
+                                              });
+                                            }
+                                          }
+                                          _mediaItem?[index].isPlaying = true;
+                                        });
                                         ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: SizedBox(
-                                                height: 40,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      'Pst. Chijioke Okonkwo- Sure Mercies of David',
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: TextThemes(context)
-                                                          .getTextStyle(
-                                                        color: AppColors
-                                                            .primaryTextColor,
-                                                        fontWeight:
-                                                            FontWeight.w300,
-                                                        fontSize: 10,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    Image.asset(
-                                                        'images/player.png'),
-                                                  ],
-                                                )),
-                                            duration: const Duration(
-                                              days: 365,
-                                            ), // Set the duration to a long time to prevent it from being automatically dismissed
-                                            backgroundColor: Color(0xFFEBF4FF),
-                                            behavior: SnackBarBehavior.fixed,
-                                          ),
-                                        );
+                                            .hideCurrentSnackBar();
+
+                                        if (_hasPreviousSnackbar) {
+                                          Future.delayed(Duration(seconds: 2),
+                                              () {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: AudioBottomPlayer(
+                                                  index: index,
+                                                  mediaAll: _mediaItem,
+                                                  isNext: () {},
+                                                  isPlaying: () {
+                                                    setState(() {
+                                                      _mediaItem?[index]
+                                                          .isPlaying = false;
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .hideCurrentSnackBar();
+                                                    });
+                                                  },
+                                                  source: 'home',
+                                                  eachMedia:
+                                                      '${_mediaItem![index].audio!.secureUrl}',
+                                                ),
+                                                duration:
+                                                    const Duration(days: 1),
+                                                backgroundColor:
+                                                    Color(0xFFEBF4FF),
+                                                behavior:
+                                                    SnackBarBehavior.fixed,
+                                              ),
+                                            );
+                                            _hasPreviousSnackbar = true;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            for (int i = 0;
+                                                i < _mediaItem!.length;
+                                                i++) {
+                                              if (i != index &&
+                                                  _mediaItem![i].isPlaying ==
+                                                      true) {
+                                                setState(() {
+                                                  _mediaItem![i].isPlaying =
+                                                      false;
+                                                });
+                                              }
+                                            }
+                                            _mediaItem?[index].isPlaying = true;
+                                          });
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: AudioBottomPlayer(
+                                                index: index,
+                                                isNext: () {},
+                                                mediaAll: _mediaItem,
+                                                isPlaying: () {
+                                                  setState(() {
+                                                    _mediaItem?[index]
+                                                        .isPlaying = false;
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .hideCurrentSnackBar();
+                                                  });
+                                                },
+                                                source: 'home',
+                                                eachMedia:
+                                                    '${_mediaItem![index].audio!.secureUrl}',
+                                              ),
+                                              duration: const Duration(days: 1),
+                                              backgroundColor:
+                                                  Color(0xFFEBF4FF),
+                                              behavior: SnackBarBehavior.fixed,
+                                            ),
+                                          );
+                                          _hasPreviousSnackbar = true;
+                                        }
                                       },
                                     ),
                                   );

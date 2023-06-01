@@ -24,5 +24,10 @@ mixin AppIcons {
   static const headPhones = 'images/headphones.svg';
   static const monitor = 'images/monitor.svg';
   static const topDash = 'images/top_dash.svg';
-
+  static const next = 'images/next.svg';
+  static const prev = 'images/prev.svg';
+  static const pause = 'images/pause.svg';
+  static const play = 'images/play.svg';
+  static const download = 'images/download.svg';
+  static const close = 'images/close.svg';
 }

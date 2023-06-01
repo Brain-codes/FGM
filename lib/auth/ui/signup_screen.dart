@@ -37,7 +37,7 @@ class _SignupScreenState extends State<SignupScreen> {
   Future<void> _handelSignup(BuildContext context) async {
     if (!_authController.signupNameController.text.isValidFullName()) {
       setState(() {
-        _emailHasError = true;
+        _nameHasError = true;
         _errorMessage = 'Enter Valid name';
       });
       return;
@@ -81,17 +81,17 @@ class _SignupScreenState extends State<SignupScreen> {
 
   void initState() {
     _authController.signupNameController.addListener(() {
-      _emailHasError = false;
+      _nameHasError = false;
     });
 
     _authController.signupPhoneController.addListener(() {
-      _emailHasError = false;
+      _phoneHasError = false;
     });
     _authController.signupEmailController.addListener(() {
       _emailHasError = false;
     });
     _authController.signupPasswordController.addListener(() {
-      _emailHasError = false;
+      _passwordHasError = false;
     });
     super.initState();
   }
@@ -123,6 +123,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       height: 40,
                     ),
                     BaseTextField(
+                      hintText: 'John Doe',
                       textInputType: TextInputType.name,
                       actionKeyboard: TextInputAction.next,
                       label: AppStrings.name,
@@ -136,6 +137,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       height: 20,
                     ),
                     BaseTextField(
+                      hintText: '09012345678',
                       textInputType: TextInputType.phone,
                       actionKeyboard: TextInputAction.next,
                       label: AppStrings.phone,
@@ -149,6 +151,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       height: 20,
                     ),
                     BaseTextField(
+                      hintText: 'example@mail.com',
                       textInputType: TextInputType.emailAddress,
                       actionKeyboard: TextInputAction.next,
                       label: AppStrings.email,
@@ -163,6 +166,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       height: 20,
                     ),
                     BaseTextField(
+                      hintText: '********',
                       textInputType: TextInputType.visiblePassword,
                       actionKeyboard: TextInputAction.done,
                       label: AppStrings.password,
@@ -189,25 +193,25 @@ class _SignupScreenState extends State<SignupScreen> {
                     SizedBox(
                       height: 15,
                     ),
-                    Obx(
-                      () => _authController.isLoading.value
-                          ? OutlineButtonWidget(
-                              onTaps: () {},
-                              buttonTitle: AppStrings.continueWithAcc,
-                            )
-                          : OutlineButtonWidget(
-                              onTaps: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const BaseBottomNavigation(),
-                                  ),
-                                );
-                              },
-                              buttonTitle: AppStrings.continueWithAcc,
-                            ),
-                    ),
+                    // Obx(
+                    //   () => _authController.isLoading.value
+                    //       ? OutlineButtonWidget(
+                    //           onTaps: () {},
+                    //           buttonTitle: AppStrings.continueWithAcc,
+                    //         )
+                    //       : OutlineButtonWidget(
+                    //           onTaps: () {
+                    //             Navigator.push(
+                    //               context,
+                    //               MaterialPageRoute(
+                    //                 builder: (context) =>
+                    //                     const BaseBottomNavigation(),
+                    //               ),
+                    //             );
+                    //           },
+                    //           buttonTitle: AppStrings.continueWithAcc,
+                    //         ),
+                    // ),
                     SizedBox(
                       height: 70,
                     ),
