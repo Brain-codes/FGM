@@ -4,6 +4,7 @@ import 'package:FGM/shared/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class EventController extends GetxController {
   final EventService _service = EventService(ApiService());
@@ -35,5 +36,15 @@ class EventController extends GetxController {
       }
     }
     isLoading.value = false;
+  }
+
+  String formatDate(DateTime dateTime) {
+    DateFormat dateFormat = DateFormat('MMMM d, yyyy');
+    return dateFormat.format(dateTime);
+  }
+
+  String formatTime(DateTime dateTime) {
+    DateFormat timeFormat = DateFormat('hh:mm a (WAT)');
+    return timeFormat.format(dateTime);
   }
 }

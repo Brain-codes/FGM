@@ -58,14 +58,14 @@ class ImageClass {
     this.version,
     this.versionId,
     this.signature,
-    this.width,
-    this.height,
+    // this.width,
+    // this.height,
     this.format,
     this.resourceType,
     this.createdAt,
     this.tags,
-    this.pages,
-    this.bytes,
+    // this.pages,
+    // this.bytes,
     this.type,
     this.etag,
     this.placeholder,
@@ -87,14 +87,14 @@ class ImageClass {
   int? version;
   String? versionId;
   String? signature;
-  int? width;
-  int? height;
+  // int? width;
+  // int? height;
   String? format;
   String? resourceType;
   DateTime? createdAt;
   List<dynamic>? tags;
-  int? pages;
-  int? bytes;
+  // int? pages;
+  // int? bytes;
   String? type;
   String? etag;
   bool? placeholder;
@@ -116,8 +116,8 @@ class ImageClass {
         version: json["version"],
         versionId: json["version_id"],
         signature: json["signature"],
-        width: json["width"],
-        height: json["height"],
+        // width: json["width"],
+        // height: json["height"],
         format: json["format"],
         resourceType: json["resource_type"],
         createdAt: json["created_at"] == null
@@ -126,8 +126,8 @@ class ImageClass {
         tags: json["tags"] == null
             ? []
             : List<dynamic>.from(json["tags"]!.map((x) => x)),
-        pages: json["pages"],
-        bytes: json["bytes"],
+        // pages: json["pages"],
+        // bytes: json["bytes"],
         type: json["type"],
         etag: json["etag"],
         placeholder: json["placeholder"],
@@ -151,14 +151,14 @@ class ImageClass {
         "version": version,
         "version_id": versionId,
         "signature": signature,
-        "width": width,
-        "height": height,
+        // "width": width,
+        // "height": height,
         "format": format,
         "resource_type": resourceType,
         "created_at": createdAt?.toIso8601String(),
         "tags": tags == null ? [] : List<dynamic>.from(tags!.map((x) => x)),
-        "pages": pages,
-        "bytes": bytes,
+        // "pages": pages,
+        // "bytes": bytes,
         "type": type,
         "etag": etag,
         "placeholder": placeholder,

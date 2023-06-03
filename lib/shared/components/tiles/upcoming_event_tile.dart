@@ -1,10 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:FGM/event/controller/event_controller.dart';
 import 'package:FGM/shared/constants/app_color.dart';
 import 'package:FGM/shared/constants/app_icon.dart';
 import 'package:FGM/shared/themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/instance_manager.dart';
 
 class UpcomingEventTile extends StatelessWidget {
   String? date;
@@ -17,6 +19,8 @@ class UpcomingEventTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final EventController _EventController = Get.put(EventController());
+
     return Stack(
       children: <Widget>[
         // Container(
@@ -63,7 +67,7 @@ class UpcomingEventTile extends StatelessWidget {
               ),
             ),
             child: Text(
-              '$date',
+              _EventController.formatDate(DateTime.parse('$date')),
               style: TextThemes(context).getTextStyle(
                 color: AppColors.primaryTextColor,
                 fontSize: 10,

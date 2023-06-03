@@ -20,6 +20,7 @@ class AllEventModel {
     this.live,
     this.image,
     this.pastEvent,
+    this.venue,
   });
 
   String? startDateTime;
@@ -29,6 +30,7 @@ class AllEventModel {
   bool? live;
   ImageClass? image;
   bool? pastEvent;
+  String? venue;
 
   factory AllEventModel.fromJson(Map<String, dynamic> json) => AllEventModel(
         startDateTime: json["startDateTime"],
@@ -39,6 +41,7 @@ class AllEventModel {
         image:
             json["image"] == null ? null : ImageClass.fromJson(json["image"]),
         pastEvent: json["pastEvent"],
+        venue: json["venue"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -49,5 +52,6 @@ class AllEventModel {
         "live": live,
         "image": image?.toJson(),
         "pastEvent": pastEvent,
+        "venue": venue,
       };
 }

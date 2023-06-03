@@ -128,11 +128,12 @@ class LiveEventTile extends StatelessWidget {
 class StreamButton extends StatelessWidget {
   String title;
   Function() onTaps;
-
+  double radius;
   StreamButton({
     super.key,
     required this.title,
     required this.onTaps,
+    this.radius = 15,
   });
 
   @override
@@ -147,10 +148,11 @@ class StreamButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.primaryColor,
           borderRadius: BorderRadius.all(
-            Radius.circular(15),
+            Radius.circular(radius),
           ),
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(
               AppIcons.monitor,
@@ -176,12 +178,14 @@ class StreamButton extends StatelessWidget {
 
 class AudioButton extends StatelessWidget {
   String title;
+  double radius;
   Function() onTaps;
 
   AudioButton({
     super.key,
     required this.title,
     required this.onTaps,
+    this.radius = 15,
   });
 
   @override
@@ -196,10 +200,11 @@ class AudioButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.faintPrimaryColor,
           borderRadius: BorderRadius.all(
-            Radius.circular(15),
+            Radius.circular(radius),
           ),
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(
               AppIcons.headPhones,

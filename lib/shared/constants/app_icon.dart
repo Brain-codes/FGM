@@ -30,4 +30,7 @@ mixin AppIcons {
   static const play = 'images/play.svg';
   static const download = 'images/download.svg';
   static const close = 'images/close.svg';
+  static const time = 'images/time.svg';
+  static const date = 'images/date.svg';
+  static const location = 'images/location.svg';
 }
