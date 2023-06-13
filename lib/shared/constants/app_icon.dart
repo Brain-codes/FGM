@@ -28,6 +28,12 @@ mixin AppIcons {
   static const prev = 'images/prev.svg';
   static const pause = 'images/pause.svg';
   static const play = 'images/play.svg';
+  static const nextTwo = 'images/next_two.svg';
+  static const prevTwo = 'images/prev_two.svg';
+  static const pauseTwo = 'images/pause_two.svg';
+  static const playTwo = 'images/play_two.svg';
+  static const forward = 'images/forward.svg';
+  static const back = 'images/back.svg';
   static const download = 'images/download.svg';
   static const close = 'images/close.svg';
   static const time = 'images/time.svg';
