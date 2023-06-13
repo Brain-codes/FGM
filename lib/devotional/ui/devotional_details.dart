@@ -53,6 +53,15 @@ class DevotionalDetails extends StatelessWidget {
                       width: double.infinity,
                       height: 120,
                       fit: BoxFit.cover,
+                      errorBuilder: (BuildContext context, Object exception,
+                          StackTrace? stackTrace) {
+                        return Image.asset(
+                          AppIcons.errorImg,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: 120,
+                        );
+                      },
                     ),
                     SizedBox(
                       height: 30,
