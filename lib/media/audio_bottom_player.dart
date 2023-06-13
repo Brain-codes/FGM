@@ -244,8 +244,20 @@ class _AudioBottomPlayerState extends State<AudioBottomPlayer> {
                     final formattedPosition = positionData?.position != null
                         ? '${positionData!.position.inMinutes}:${(positionData.position.inSeconds % 60).toString().padLeft(2, '0')}'
                         : '0:00';
+                    final formattedDuration = positionData?.duration != null
+                        ? '${positionData!.duration.inMinutes}:${(positionData.duration.inSeconds % 60).toString().padLeft(2, '0')}'
+                        : '0:00';
+
                     return Row(
                       children: [
+                        Text(
+                          '$formattedPosition',
+                          style: TextThemes(context).getTextStyle(
+                            color: AppColors.primaryTextColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: 10,
+                          ),
+                        ),
                         Expanded(
                           flex: 8,
                           child: SizedBox(
