@@ -44,12 +44,10 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    if (FormValidator.passwordRegex
-            .hasMatch(_authController.loginPasswordController.text) ==
-        false) {
+    if (_authController.loginPasswordController.text.isEmpty) {
       setState(() {
         _passwordHasError = true;
-        _errorMessage = 'Enter Valid Password eg Sample@1234';
+        _errorMessage = 'Password Cannot be Empty';
       });
       return;
     }
