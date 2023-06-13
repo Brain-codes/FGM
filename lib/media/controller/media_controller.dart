@@ -1,5 +1,6 @@
 import 'package:FGM/media/model/all_media_model.dart';
 import 'package:FGM/media/services/media_service.dart';
+import 'package:FGM/shared/components/snackbar/snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -10,7 +11,9 @@ class MediaController extends GetxController {
   final isLoading = false.obs;
   var mediaItem = <AllMediaModel>[].obs;
 
-  Future<void> getAllMedia(BuildContext context, ) async {
+  Future<void> getAllMedia(
+    BuildContext context,
+  ) async {
     isLoading.value = true;
     final response = await _service.getAllMedai();
     if (response.code == 200) {

@@ -4,6 +4,7 @@ import 'package:FGM/media/audio_bottom_player.dart';
 import 'package:FGM/media/controller/media_controller.dart';
 import 'package:FGM/media/model/all_media_model.dart';
 import 'package:FGM/media/services/audio_player_service.dart';
+import 'package:FGM/shared/components/bottom_sheet/audio_player_bottom_sheet.dart';
 import 'package:FGM/shared/components/loading/message_loading.dart';
 import 'package:FGM/shared/components/searchbar/base_searchbar.dart';
 import 'package:FGM/shared/components/snackbar/snack_bar.dart';
@@ -17,8 +18,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_svg/parser.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/instance_manager.dart';
+// import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get.dart';
+// import 'package:get/instance_manager.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 
@@ -26,7 +28,11 @@ class MediaScreen extends StatefulWidget {
   List<AllMediaModel>? mediaItem;
   String? source;
 
-  MediaScreen({super.key, this.mediaItem = null, this.source = 'none'});
+  MediaScreen({
+    super.key,
+    this.mediaItem = null,
+    this.source = 'none',
+  });
 
   @override
   State<MediaScreen> createState() => _MediaScreenState();
@@ -47,6 +53,17 @@ class _MediaScreenState extends State<MediaScreen> {
       _filteredMediaItem = _mediaItem; //
       // _init(0);
     });
+  }
+
+  toDownload(int index) {
+    final url = _filteredMediaItem![index].audio?.secureUrl;
+    final filename =
+        '${_filteredMediaItem![index].title} by ${_mediaItem![index].name}';
+  }
+
+  void handleBottomSheetDismissed(AudioPlayer stoping) {
+    // Implement your logic here for when the bottom sheet is dismissed
+    stoping.stop();
   }
 
   @override
@@ -84,9 +101,17 @@ class _MediaScreenState extends State<MediaScreen> {
   @override
   void dispose() {
     _searchController.dispose();
+    // ScaffoldMessenger.of(context).hideCurrentSnackBar();
     super.dispose();
   }
 
+  @override
+  // void deactivate() {
+  //   if (ScaffoldMessenger.of(context).mounted) {
+  //     ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  //   }
+  //   super.deactivate();
+  // }
   // @override
   // void dispose() {
   //   _filteredMediaItem?.forEach((item) {
@@ -240,71 +265,80 @@ class _MediaScreenState extends State<MediaScreen> {
                                         ?.secureUrl;
                                     final filename =
                                         '${_filteredMediaItem![index].title} by ${_mediaItem![index].name}';
-                                    _downloadFile('$url', filename,
-                                        index); // pass the index of the media item
+                                    _downloadFile('$url', filename, index);
                                   },
                                   onTaps: () {
-                                    setState(() {
-                                      for (int i = 0;
-                                          i < _filteredMediaItem!.length;
-                                          i++) {
-                                        if (i != index &&
-                                            _filteredMediaItem![i].isPlaying ==
-                                                true) {
-                                          setState(() {
-                                            _filteredMediaItem![i].isPlaying =
-                                                false;
-                                          });
-                                        }
-                                      }
-                                      _mediaItem?[index].isPlaying = true;
-                                    });
-                                    ScaffoldMessenger.of(context)
-                                        .hideCurrentSnackBar();
-                                    Future.delayed(Duration(seconds: 2), () {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: AudioBottomPlayer(
-                                            index: index,
-                                            mediaAll: _filteredMediaItem,
-                                            isNext: () {
-                                              setState(() {
-                                                for (int i = 0;
-                                                    i <
-                                                        _filteredMediaItem!
-                                                            .length;
-                                                    i++) {
-                                                  if (i != index &&
-                                                      _filteredMediaItem![i]
-                                                              .isPlaying ==
-                                                          true) {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      backgroundColor: Colors.transparent,
+                                      useRootNavigator: true,
+                                      isScrollControlled: true,
+                                      isDismissible: false,
+                                      enableDrag: false,
+                                      builder: (BuildContext context) {
+                                        return SingleChildScrollView(
+                                          child: Padding(
+                                            padding: EdgeInsets.only(
+                                              bottom: MediaQuery.of(context)
+                                                  .viewInsets
+                                                  .bottom,
+                                            ),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                AudioBottomSheet(
+                                                  index: index,
+                                                  mediaAll: _filteredMediaItem,
+                                                  onStopAndClose: (value) {
+                                                    handleBottomSheetDismissed(
+                                                        value);
+                                                  },
+                                                  isNext: () {
                                                     setState(() {
-                                                      _filteredMediaItem![i]
+                                                      for (int i = 0;
+                                                          i <
+                                                              _filteredMediaItem!
+                                                                  .length;
+                                                          i++) {
+                                                        if (i != index &&
+                                                            _filteredMediaItem![
+                                                                        i]
+                                                                    .isPlaying ==
+                                                                true) {
+                                                          setState(() {
+                                                            _filteredMediaItem![
+                                                                        i]
+                                                                    .isPlaying =
+                                                                false;
+                                                          });
+                                                        }
+                                                      }
+                                                      _mediaItem?[index]
+                                                          .isPlaying = true;
+                                                    });
+                                                  },
+                                                  isPlaying: () {
+                                                    setState(() {
+                                                      _filteredMediaItem?[index]
                                                           .isPlaying = false;
                                                     });
-                                                  }
-                                                }
-                                                _mediaItem?[index].isPlaying =
-                                                    true;
-                                              });
-                                            },
-                                            isPlaying: () {
-                                              setState(() {
-                                                _filteredMediaItem?[index]
-                                                    .isPlaying = false;
-                                              });
-                                              ScaffoldMessenger.of(context)
-                                                  .hideCurrentSnackBar();
-                                            },
-                                            eachMedia:
-                                                '${_filteredMediaItem![index].audio!.secureUrl}',
+                                                    Get.back();
+                                                  },
+                                                  eachMedia:
+                                                      '${_filteredMediaItem![index].audio!.secureUrl}',
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                          duration: const Duration(days: 1),
-                                          backgroundColor: Color(0xFFEBF4FF),
-                                          behavior: SnackBarBehavior.fixed,
-                                        ),
-                                      );
+                                        );
+                                      },
+                                    ).then((value) {
+                                      // This callback will be called when the bottom sheet is dismissed
+                                      // You can call your desired function here
+                                      // handleBottomSheetDismissed();
+                                      handleBottomSheetDismissed;
                                     });
                                   },
                                 ),
