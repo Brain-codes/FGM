@@ -9,6 +9,7 @@ import 'package:FGM/media/audio_bottom_player.dart';
 import 'package:FGM/media/controller/media_controller.dart';
 import 'package:FGM/media/media_screen.dart';
 import 'package:FGM/media/model/all_media_model.dart';
+import 'package:FGM/shared/components/bottom_sheet/audio_player_bottom_sheet.dart';
 import 'package:FGM/shared/components/empty/empty_event.dart';
 import 'package:FGM/shared/components/loading/devotional_loading.dart';
 import 'package:FGM/shared/components/loading/message_loading.dart';
@@ -26,6 +27,7 @@ import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
+import 'package:just_audio/just_audio.dart';
 
 import '../devotional/ui/devotional_details.dart';
 
@@ -46,6 +48,22 @@ class _HomeScreenState extends State<HomeScreen> {
   List<AllMediaModel>? _mediaItem;
   List<AllWotwModel>? _wotwItem;
   bool _hasPreviousSnackbar = false;
+
+  void handleBottomSheetDismissed(AudioPlayer stoping) {
+    // Implement your logic here for when the bottom sheet is dismissed
+    stoping.stop();
+  }
+
+  toDownload(int index) {
+    final url = _mediaItem![index].audio?.secureUrl;
+    final filename =
+        '${_mediaItem![index].title} by ${_mediaItem![index].name}';
+    _downloadFile(
+      '$url',
+      filename,
+      index,
+    ); // pass the index of the media item
+  }
 
   getAllDevotion() async {
     await _HomeController.getAllDevotional(context);
@@ -292,127 +310,99 @@ class _HomeScreenState extends State<HomeScreen> {
                                 scrollDirection: Axis.vertical,
                                 itemBuilder: (context, index) {
                                   return Padding(
-                                    padding: const EdgeInsets.only(
-                                      bottom: 20,
-                                    ),
-                                    child: MessagesTile(
-                                      image:
-                                          _mediaItem?[index].image?.secureUrl,
-                                      message: _mediaItem?[index].title,
-                                      pastor: _mediaItem?[index].name,
-                                      date: _mediaItem?[index].date,
-                                      progress: _mediaItem?[index].progress,
-                                      isPlaying: _mediaItem?[index].isPlaying,
-                                      onTapsDownload: () {
-                                        final url =
-                                            _mediaItem![index].audio?.secureUrl;
-                                        final filename =
-                                            '${_mediaItem![index].title} by ${_mediaItem![index].name}';
-                                        _downloadFile(
-                                          '$url',
-                                          filename,
-                                          index,
-                                        ); // pass the index of the media item
-                                      },
-                                      onTaps: () {
-                                        setState(() {
-                                          for (int i = 0;
-                                              i < _mediaItem!.length;
-                                              i++) {
-                                            if (i != index &&
-                                                _mediaItem![i].isPlaying ==
-                                                    true) {
-                                              setState(() {
-                                                _mediaItem![i].isPlaying =
-                                                    false;
-                                              });
-                                            }
-                                          }
-                                          _mediaItem?[index].isPlaying = true;
-                                        });
-                                        ScaffoldMessenger.of(context)
-                                            .hideCurrentSnackBar();
-
-                                        if (_hasPreviousSnackbar) {
-                                          Future.delayed(Duration(seconds: 2),
-                                              () {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: AudioBottomPlayer(
-                                                  index: index,
-                                                  mediaAll: _mediaItem,
-                                                  isNext: () {},
-                                                  isPlaying: () {
-                                                    setState(() {
-                                                      _mediaItem?[index]
-                                                          .isPlaying = false;
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .hideCurrentSnackBar();
-                                                    });
-                                                  },
-                                                  source: 'home',
-                                                  eachMedia:
-                                                      '${_mediaItem![index].audio!.secureUrl}',
-                                                ),
-                                                duration:
-                                                    const Duration(days: 1),
-                                                backgroundColor:
-                                                    Color(0xFFEBF4FF),
-                                                behavior:
-                                                    SnackBarBehavior.fixed,
-                                              ),
-                                            );
-                                            _hasPreviousSnackbar = true;
-                                          });
-                                        } else {
-                                          setState(() {
-                                            for (int i = 0;
-                                                i < _mediaItem!.length;
-                                                i++) {
-                                              if (i != index &&
-                                                  _mediaItem![i].isPlaying ==
-                                                      true) {
-                                                setState(() {
-                                                  _mediaItem![i].isPlaying =
-                                                      false;
-                                                });
-                                              }
-                                            }
-                                            _mediaItem?[index].isPlaying = true;
-                                          });
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              content: AudioBottomPlayer(
-                                                index: index,
-                                                isNext: () {},
-                                                mediaAll: _mediaItem,
-                                                isPlaying: () {
-                                                  setState(() {
-                                                    _mediaItem?[index]
-                                                        .isPlaying = false;
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .hideCurrentSnackBar();
-                                                  });
-                                                },
-                                                source: 'home',
-                                                eachMedia:
-                                                    '${_mediaItem![index].audio!.secureUrl}',
-                                              ),
-                                              duration: const Duration(days: 1),
+                                      padding: const EdgeInsets.only(
+                                        bottom: 20,
+                                      ),
+                                      child: MessagesTile(
+                                          image: _mediaItem?[index]
+                                              .image
+                                              ?.secureUrl,
+                                          message: _mediaItem?[index].title,
+                                          pastor: _mediaItem?[index].name,
+                                          date: _mediaItem?[index].date,
+                                          progress: _mediaItem?[index].progress,
+                                          isPlaying: false,
+                                          onTapsDownload: () {
+                                            final url = _mediaItem![index]
+                                                .audio
+                                                ?.secureUrl;
+                                            final filename =
+                                                '${_mediaItem![index].title} by ${_mediaItem![index].name}';
+                                            _downloadFile(
+                                                '$url', filename, index);
+                                          },
+                                          onTaps: () {
+                                            showModalBottomSheet(
+                                              context: context,
                                               backgroundColor:
-                                                  Color(0xFFEBF4FF),
-                                              behavior: SnackBarBehavior.fixed,
-                                            ),
-                                          );
-                                          _hasPreviousSnackbar = true;
-                                        }
-                                      },
-                                    ),
-                                  );
+                                                  Colors.transparent,
+                                              useRootNavigator: true,
+                                              isScrollControlled: true,
+                                              isDismissible: false,
+                                              enableDrag: false,
+                                              builder: (BuildContext context) {
+                                                return SingleChildScrollView(
+                                                    child: Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                          bottom: MediaQuery.of(
+                                                                  context)
+                                                              .viewInsets
+                                                              .bottom,
+                                                        ),
+                                                        child: Column(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              AudioBottomSheet(
+                                                                index: index,
+                                                                mediaAll:
+                                                                    _mediaItem,
+                                                                onStopAndClose:
+                                                                    (value) {
+                                                                  handleBottomSheetDismissed(
+                                                                      value);
+                                                                },
+                                                                isNext: () {
+                                                                  setState(() {
+                                                                    for (int i =
+                                                                            0;
+                                                                        i < _mediaItem!.length;
+                                                                        i++) {
+                                                                      if (i !=
+                                                                              index &&
+                                                                          _mediaItem![i].isPlaying ==
+                                                                              true) {
+                                                                        setState(
+                                                                            () {
+                                                                          _mediaItem![i].isPlaying =
+                                                                              false;
+                                                                        });
+                                                                      }
+                                                                    }
+                                                                    _mediaItem?[
+                                                                            index]
+                                                                        .isPlaying = true;
+                                                                  });
+                                                                },
+                                                                isPlaying: () {
+                                                                  setState(() {
+                                                                    _mediaItem?[
+                                                                            index]
+                                                                        .isPlaying = false;
+                                                                  });
+                                                                },
+                                                                eachMedia:
+                                                                    '${_mediaItem![index].audio!.secureUrl}',
+                                                              ),
+                                                            ])));
+                                              },
+                                            );
+                                          }));
                                 },
                               ),
                             ),
