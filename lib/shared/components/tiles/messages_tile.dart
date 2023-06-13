@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 
 class MessagesTile extends StatelessWidget {
   void Function() onTaps;
-  void Function() onTapsDownload;
+  dynamic Function() onTapsDownload;
   String? image;
   String? pastor;
   String? message;
