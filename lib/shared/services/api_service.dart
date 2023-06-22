@@ -36,19 +36,21 @@ class ApiService {
   }) async {
     final _headers = ApiService().userAuthorizationJson();
 
-    if (queryParams != null) {
-      url += '?' + Uri(queryParameters: queryParams).query;
+    if (queryParams != null && queryParams.isNotEmpty) {
+      final uri = Uri.parse(url);
+      final queryParameters = queryParams.map((key, value) {
+        if (value is bool) {
+          return MapEntry(key, value.toString());
+        }
+        return MapEntry(key, value);
+      });
+      url = uri.replace(queryParameters: queryParameters).toString();
     }
     print(url);
-    final response = await client
-        .get(
-          Uri.parse(url),
-          headers: _headers,
-        )
-        .timeout(
-          Duration(seconds: _timeoutDuration),
-        );
-    return _handleResponse(response);
+    return executeRequest(() => client.get(Uri.parse(url), headers: _headers));
+    // final response = await client.get(Uri.parse(url), headers: _headers,)
+    //     .timeout(Duration(seconds: _timeoutDuration));
+    // return _handleResponse(response);
   }
 
   static Future<String?> fetchUrl(Uri uri,
@@ -71,21 +73,21 @@ class ApiService {
       url += '?' + Uri(queryParameters: queryParams).query;
     }
     print(url);
-    if (body != null) {
-      String jsonBody = jsonEncode(body);
-      final response = await client
-          .post(Uri.parse(url), headers: _headers, body: jsonBody)
-          .timeout(Duration(seconds: _timeoutDuration));
-      print(response.body);
-      print(response.statusCode);
 
-      return _handleResponse(response);
-    }
-
-    final response = await client
-        .post(Uri.parse(url), headers: _headers)
-        .timeout(Duration(seconds: _timeoutDuration));
-    return _handleResponse(response);
+    return executeRequest(() async {
+      if (body != null) {
+        String jsonBody = jsonEncode(body);
+        final response = await client
+            .post(Uri.parse(url), headers: _headers, body: jsonBody)
+            .timeout(Duration(seconds: _timeoutDuration));
+        return response;
+      } else {
+        final response = await client
+            .post(Uri.parse(url), headers: _headers)
+            .timeout(Duration(seconds: _timeoutDuration));
+        return response;
+      }
+    });
   }
 
   Future<BaseApiResponse> put(String url, Map<String, dynamic> body) async {
@@ -119,6 +121,52 @@ class ApiService {
     request.fields['fileType'] = fileType;
     final response = await request.send();
     return _handleResponse((await http.Response.fromStream(response)));
+  }
+
+  Future<BaseApiResponse> executeRequest(
+    Future<http.Response> Function() requestMethod,
+  ) async {
+    final _timeoutDuration = 15;
+
+    try {
+      final response = await requestMethod().timeout(
+        Duration(seconds: _timeoutDuration),
+        onTimeout: () {
+          // Timeout has occurred
+          throw TimeoutException('The connection timed out.');
+        },
+      );
+
+      return _handleResponse(response);
+    } on TimeoutException catch (_) {
+      // Handle TimeoutException here
+      errorSnackBar('Oops!', 'Took Long to respond');
+      return BaseApiResponse(
+        code: -1, // Set an appropriate error code
+        message: 'Timeout occurred',
+        success: false,
+        data: null,
+      );
+    } on SocketException catch (_) {
+      // Handle SocketException here
+      errorSnackBar(
+          'Unstable Network', 'it Looks like you internet connection is bad.');
+      return BaseApiResponse(
+        code: -1, // Set an appropriate error code
+        message: 'SocketException occurred',
+        success: false,
+        data: null,
+      );
+    } catch (e) {
+      // Handle other exceptions here
+      errorSnackBar('Error', 'Oops, an unexpected error occurred');
+      return BaseApiResponse(
+        code: -1, // Set an appropriate error code
+        message: 'Unexpected error occurred',
+        success: false,
+        data: null,
+      );
+    }
   }
 
   dynamic _handleResponse(http.Response response) {
